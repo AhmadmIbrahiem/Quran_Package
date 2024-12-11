@@ -1,69 +1,50 @@
+import React, { useEffect, useState } from "react";
+import "./style.css";
 import {
-  VersesContainer,
+  VerseAndPaginationWrapper,
   VerseText,
   PaginationContainer,
-  SurahTitle,
-  VerseAndPaginationWrapper,
-  Bismillah,
 } from "../quranVerses/QuranVerses.styled";
-import { ArrowDown, ArrowUp } from "../../assets/icons";
+import { ArrowUp, ArrowDown } from "../../assets/icons";
+import { renderLinesWithSurahTitles } from "./renderLinesWithSurahTitles";
+import LoadingScreen from "../loadingScreen /LoadingScreen";
 
-const PageMode = ({
-  currentPage,
-  totalPages,
-  verses,
-  surahs,
-  onPageChange,
-}) => {
-  const renderVersesWithTitles = () => {
-    const surahNames = [];
-    let currentSurah = null;
-    /* How to add the font to the surah names like th */
-    verses.forEach((verse) => {
-      const [surahId, verseNumber] = verse.verse_key.split(":");
-      const surah = surahs?.find((s) => s.id === parseInt(surahId));
+const PageMode = ({ currentPage, totalPages, lines, surahs, onPageChange }) => {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-      if (verseNumber === "1" && surah) {
-        surahNames.push(
-          <SurahTitle key={`title-${surahId}`}>{surah.name_arabic}</SurahTitle>
-        );
+  useEffect(() => {
+    if (document.fonts) {
+      document.fonts.ready.then(() => setFontsLoaded(true));
+    } else {
+      setFontsLoaded(false);
+    }
+  }, []);
 
-        if (surah.bismillah_pre) {
-          surahNames.push(
-            <Bismillah key={`bismillah-${surahId}`}>﷽</Bismillah>
-          );
-        }
-
-        currentSurah = surah;
-      }
-
-      surahNames.push(
-        <span key={verse.verse_key}>
-          {verse.text_uthmani} ({verseNumber}){" "}
-        </span>
-      );
-    });
-
-    return surahNames;
-  };
+  if (!lines || !surahs.length || !fontsLoaded) {
+    return <LoadingScreen />;
+  }
 
   return (
-    <>
-      <VerseAndPaginationWrapper>
-        <VerseText>{renderVersesWithTitles()}</VerseText>
-        <PaginationContainer>
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => onPageChange(1)}
-          >
-            <ArrowUp />
-          </button>
-          <button disabled={currentPage === 1} onClick={() => onPageChange(-1)}>
-            <ArrowDown />
-          </button>
-        </PaginationContainer>
-      </VerseAndPaginationWrapper>
-    </>
+    <VerseAndPaginationWrapper>
+      <VerseText>
+        {renderLinesWithSurahTitles(lines, surahs, currentPage)}
+      </VerseText>
+
+      <PaginationContainer>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => onPageChange(currentPage + 1)}
+        >
+          <ArrowUp />
+        </button>
+        <button
+          disabled={currentPage === 1}
+          onClick={() => onPageChange(currentPage - 1)}
+        >
+          <ArrowDown />
+        </button>
+      </PaginationContainer>
+    </VerseAndPaginationWrapper>
   );
 };
 

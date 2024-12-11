@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-
 export const TableContainer = styled.div`
   position: relative;
   bottom: 80px;
@@ -13,6 +12,18 @@ export const TableContainer = styled.div`
   font-family: Arial, sans-serif;
   overflow-y: auto;
   z-index: 1000;
+
+  @media (max-width: 768px) {
+    bottom: 50px;
+    left: 60px;
+    max-width: 50%;
+  }
+
+  @media (max-width: 480px) {
+    bottom: 30px;
+    left: 50px;
+    padding: 5px;
+  }
 `;
 
 export const SearchInput = styled.input`
@@ -21,6 +32,16 @@ export const SearchInput = styled.input`
   border: 1px solid #ddd;
   font-size: 1rem;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
 `;
 
 export const Table = styled.table`
@@ -45,6 +66,22 @@ export const Table = styled.table`
     background-color: #f9f9f9;
     cursor: pointer;
   }
+
+  @media (max-width: 768px) {
+    th,
+    td {
+      font-size: 0.7rem;
+      padding: 8px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    th,
+    td {
+      font-size: 0.6rem;
+      padding: 6px;
+    }
+  }
 `;
 
 export const ToggleButton = styled.button`
@@ -58,4 +95,16 @@ export const ToggleButton = styled.button`
   padding: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+    bottom: 15px;
+    left: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px;
+    bottom: 10px;
+    left: 10px;
+  }
 `;

@@ -23,21 +23,27 @@ export const fetchQuran = async (chapter) => {
 };
 
 export const fetchQuranPage = async (page) => {
-  const apiUrl = `https://api.quran.com/api/v4/verses/by_page/${page}?words=true&fields=text_uthmani&word_fields=text_uthmani,code_v1&v1_page=${page}`;
-  const params = {
-    fields: "text_uthmani",
-    per_page: "all",
-  };
+  const apiUrl = `https://api.quran.com/api/v4/verses/by_page/${page}?words=true&fields=text_uthmani&word_fields=text_uthmani,code_v1,line_number`;
 
   try {
-    const response = await axios.get(apiUrl, { params });
-    console.log(response);
+    const response = await axios.get(apiUrl);
 
-    const verses = response.data.verses;
+    const { verses } = response.data;
     const meta = response.data.meta;
-    console.log(response);
 
-    return { verses, meta };
+    const lines = {};
+    verses.forEach((verse) => {
+      verse.words.forEach((word) => {
+        const lineNumber = word.line_number;
+        if (!lines[lineNumber]) lines[lineNumber] = [];
+        lines[lineNumber].push({
+          text: word.code_v1,
+          verseKey: verse.verse_key,
+        });
+      });
+    });
+
+    return { lines, meta };
   } catch (error) {
     console.error("Error fetching Quran page data:", error);
     throw error;

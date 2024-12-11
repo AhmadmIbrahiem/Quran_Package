@@ -41,7 +41,9 @@ const SurahFahres = ({ surahs, onSurahSelect }) => {
               {filteredSurahs.map((surah) => (
                 <tr key={surah.id} onClick={() => onSurahSelect(surah.id)}>
                   <td>{surah.id}</td>
-                  <td>{surah.name_simple}</td>
+                  <td>
+                    {surah.name_simple} /{surah.name_arabic}
+                  </td>
                   <td>{surah.pages[0]}</td>
                 </tr>
               ))}

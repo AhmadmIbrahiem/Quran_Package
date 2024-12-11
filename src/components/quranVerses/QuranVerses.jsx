@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { fetchQuranPage, fetchSurahs } from "../../services/quranFetch";
-import { QuranContainer, Title } from "./QuranVerses.styled";
-import SurahFahres from "../surahFahres/SurahFahres";
-import PageFahres from "../pageFahres/PageFahres";
+import { QuranContainer } from "./QuranVerses.styled";
+import PageMode from "../pageFahres/PageFahres";
+import SurahFahres from "../../shared Component/surahFahres/SurahFahres";
+import LoadingScreen from "../loadingScreen /LoadingScreen";
 
 const QuranVerses = () => {
-  const [verses, setVerses] = useState([]);
-  const [surahs, setSurahs] = useState([]);
+  const [lines, setLines] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(604);
+  const [surahs, setSurahs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllSurahs = async () => {
@@ -25,13 +27,17 @@ const QuranVerses = () => {
   useEffect(() => {
     const fetchPageData = async () => {
       try {
-        const { verses, meta } = await fetchQuranPage(currentPage);
-        setVerses(verses);
+        setIsLoading(true); // Loading starts
+        const { lines, meta } = await fetchQuranPage(currentPage);
+        setLines(lines);
         setTotalPages(meta.last_page || 604);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false); // Loading ends
       }
     };
+
     fetchPageData();
   }, [currentPage]);
 
@@ -42,23 +48,22 @@ const QuranVerses = () => {
     }
   };
 
-  const handlePageChange = (direction) => {
-    setCurrentPage((prev) => prev + direction);
-  };
-
   return (
-    <QuranContainer>
-      <PageFahres
-        currentPage={currentPage}
-        totalPages={totalPages}
-        verses={verses}
-        surahs={surahs}
-        onPageChange={handlePageChange}
-      />
-      <SurahFahres surahs={surahs} onSurahSelect={handleSurahSelect} />
-
-      <Title>{currentPage}</Title>
-    </QuranContainer>
+    <>
+      {isLoading && <LoadingScreen />}
+      {!isLoading && (
+        <QuranContainer>
+          <PageMode
+            currentPage={currentPage}
+            totalPages={totalPages}
+            lines={lines}
+            onPageChange={setCurrentPage}
+            surahs={surahs}
+          />
+          <SurahFahres surahs={surahs} onSurahSelect={handleSurahSelect} />
+        </QuranContainer>
+      )}
+    </>
   );
 };
 
