@@ -62,7 +62,6 @@ export const VerseText = styled.p`
     font-size: 1rem;
   }
 `;
-
 export const PaginationContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,7 +71,7 @@ export const PaginationContainer = styled.div`
   gap: 10px;
 
   button {
-    padding: 10px 15px;
+    padding: 10px 20px;
     font-size: 1rem;
     background-color: gold;
     color: white;
@@ -93,21 +92,19 @@ export const PaginationContainer = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: row;
-    gap: 5px;
     justify-content: space-between;
-    button {
-      font-size: 0.8rem;
-      padding: 8px 12px;
-    }
+    margin: 30px auto;
+    width: 100%;
+    max-width: 300px;
   }
 
   @media (max-width: 480px) {
-    flex-direction: row;
-    gap: 3px;
+    gap: 5px;
+    margin: 10px 0;
 
     button {
-      font-size: 0.7rem;
-      padding: 6px 8px;
+      font-size: 0.8rem;
+      padding: 6px 12px;
     }
   }
 `;
@@ -146,10 +143,10 @@ export const Bismillah = styled.p`
 
 export const Word = styled.span`
   font-family: ${({ currentPage }) => `p${currentPage}`};
-  font-size: 2rem;
+  font-size: 3.5rem;
 
   @media (max-width: 768px) {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
   }
 
   @media (max-width: 494px) {

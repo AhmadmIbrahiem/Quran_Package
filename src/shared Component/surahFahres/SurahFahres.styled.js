@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 export const TableContainer = styled.div`
   position: relative;
-  bottom: 80px;
+  bottom: 14rem;
   left: 90px;
   width: 90%;
   max-width: 300px;
-  max-height: 300px;
+  max-height: 200px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -14,13 +14,11 @@ export const TableContainer = styled.div`
   z-index: 1000;
 
   @media (max-width: 768px) {
-    bottom: 50px;
     left: 60px;
     max-width: 50%;
   }
 
   @media (max-width: 480px) {
-    bottom: 30px;
     left: 50px;
     padding: 5px;
   }

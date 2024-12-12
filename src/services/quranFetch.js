@@ -1,11 +1,9 @@
-import axios from "axios";
-
-const api = process.env.REACT_APP_QURAN_API;
+import apiInstance from "./axiosInterceptor"; // Import the custom Axios instance
 
 export const fetchQuran = async (chapter) => {
   try {
-    const surahResponse = await axios.get(`${api}/chapters/${chapter}`);
-    const versesResponse = await axios.get(`${api}/quran/verses/uthmani`, {
+    const surahResponse = await apiInstance.get(`/chapters/${chapter}`);
+    const versesResponse = await apiInstance.get(`/quran/verses/uthmani`, {
       params: { chapter_number: chapter },
     });
     console.log(surahResponse.data);
@@ -17,16 +15,16 @@ export const fetchQuran = async (chapter) => {
 
     return { surahName, bismillah, verses };
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching Quran data:", error);
     throw error;
   }
 };
 
 export const fetchQuranPage = async (page) => {
-  const apiUrl = `https://api.quran.com/api/v4/verses/by_page/${page}?words=true&fields=text_uthmani&word_fields=text_uthmani,code_v1,line_number`;
-
   try {
-    const response = await axios.get(apiUrl);
+    const response = await apiInstance.get(
+      `/verses/by_page/${page}?words=true&fields=text_uthmani&word_fields=text_uthmani,code_v1,line_number`
+    );
 
     const { verses } = response.data;
     const meta = response.data.meta;
@@ -52,9 +50,7 @@ export const fetchQuranPage = async (page) => {
 
 export const fetchSurahs = async () => {
   try {
-    const response = await axios.get(`${api}/chapters`);
-    console.log(response);
-
+    const response = await apiInstance.get(`/chapters`);
     return response.data.chapters;
   } catch (error) {
     console.error("Error fetching Surahs:", error);

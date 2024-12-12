@@ -18,6 +18,46 @@ const ArrowUp = () => {
   );
 };
 
+const ArrowRight = () => {
+  return (
+    <svg
+      width="9"
+      height="15"
+      viewBox="0 0 9 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M1.27344 1.36523L7.51668 7.60848L1.27343 13.8517"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
+const ArrowLeft = () => {
+  return (
+    <svg
+      width="9"
+      height="15"
+      viewBox="0 0 9 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.73047 13.8916L1.48723 7.64836L7.73047 1.40511"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
 const ArrowDown = () => {
   return (
     <svg
@@ -63,4 +103,4 @@ const BookIcon = () => (
   </svg>
 );
 
-export { ArrowDown, ArrowUp, BookIcon };
+export { ArrowDown, ArrowUp, ArrowRight, ArrowLeft, BookIcon };
