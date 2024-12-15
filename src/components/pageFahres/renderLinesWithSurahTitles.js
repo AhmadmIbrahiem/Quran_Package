@@ -3,32 +3,31 @@ import { SurahTitle, Bismillah, Word } from "../quranVerses/QuranVerses.styled";
 
 export const renderLinesWithSurahTitles = (lines, surahs, currentPage) => {
   const renderedLines = [];
-  let currentSurahId = null;
+  const renderedChapters = [];
 
-  Object.entries(lines).forEach(([lineNumber, words]) => {
-    const firstWord = words[0];
+  Object.entries(lines).forEach(([lineNumber, lineData]) => {
+    const { words, surahNumBeforeLine } = lineData;
 
-    if (firstWord?.verseKey) {
-      const [surahId, verseNumber] = firstWord.verseKey.split(":");
-      if (verseNumber === "1" && surahId !== currentSurahId) {
-        currentSurahId = surahId;
-        const surah = surahs?.find((s) => s.id === parseInt(surahId));
+    if (surahNumBeforeLine && !renderedChapters.includes(surahNumBeforeLine)) {
+      renderedChapters.push(surahNumBeforeLine);
 
-        if (surah) {
-          renderedLines.push(
-            <SurahTitle key={surahId}>{surah.name_arabic}</SurahTitle>
-          );
+      renderedLines.push(
+        <SurahTitle key={`surah-${surahNumBeforeLine}`}>
+          {String(surahNumBeforeLine).padStart(3, "0")}surah
+        </SurahTitle>
+      );
 
-          if (surah.bismillah_pre) {
-            renderedLines.push(<Bismillah key={surahId}>﷽</Bismillah>);
-          }
-        }
+      if (surahNumBeforeLine !== "1" && surahNumBeforeLine !== "9") {
+        renderedLines.push(
+          <Bismillah key={`bismillah-${surahNumBeforeLine}`}>﷽</Bismillah>
+        );
       }
     }
+
     renderedLines.push(
       <div key={lineNumber}>
-        {words.map((word, index) => (
-          <Word key={index} currentPage={currentPage}>
+        {words.map((word) => (
+          <Word key={word.id} currentPage={currentPage}>
             {word.text}
           </Word>
         ))}

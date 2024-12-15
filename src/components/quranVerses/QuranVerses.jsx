@@ -7,63 +7,55 @@ import LoadingScreen from "../loadingScreen /LoadingScreen";
 
 const QuranVerses = () => {
   const [lines, setLines] = useState(null);
+  const [surahs, setSurahs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(604);
-  const [surahs, setSurahs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAllSurahs = async () => {
+    const fetchAllData = async () => {
       try {
-        const surahsList = await fetchSurahs();
-        setSurahs(surahsList);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchAllSurahs();
-  }, []);
+        setIsLoading(true);
 
-  useEffect(() => {
-    const fetchPageData = async () => {
-      try {
-        setIsLoading(true); // Loading starts
+        const surahsList = await fetchSurahs();
         const { lines, meta } = await fetchQuranPage(currentPage);
+
+        setSurahs(surahsList);
         setLines(lines);
         setTotalPages(meta.last_page || 604);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching Quran data:", error);
       } finally {
-        setIsLoading(false); // Loading ends
+        setIsLoading(false);
       }
     };
 
-    fetchPageData();
+    fetchAllData();
   }, [currentPage]);
 
   const handleSurahSelect = (surahId) => {
     const surah = surahs.find((s) => s.id === surahId);
-    if (surah) {
+    if (surah && surah.pages?.length > 0) {
       setCurrentPage(surah.pages[0]);
     }
   };
 
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <>
-      {isLoading && <LoadingScreen />}
-      {!isLoading && (
-        <QuranContainer>
-          <PageMode
-            currentPage={currentPage}
-            totalPages={totalPages}
-            lines={lines}
-            onPageChange={setCurrentPage}
-            surahs={surahs}
-          />
-          <SurahFahres surahs={surahs} onSurahSelect={handleSurahSelect} />
-        </QuranContainer>
-      )}
-    </>
+    <QuranContainer>
+      <PageMode
+        currentPage={currentPage}
+        totalPages={totalPages}
+        lines={lines}
+        surahs={surahs}
+        onPageChange={setCurrentPage}
+      />
+
+      <SurahFahres surahs={surahs} onSurahSelect={handleSurahSelect} />
+    </QuranContainer>
   );
 };
 

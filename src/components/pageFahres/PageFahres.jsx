@@ -10,23 +10,26 @@ import { renderLinesWithSurahTitles } from "./renderLinesWithSurahTitles";
 import LoadingScreen from "../loadingScreen /LoadingScreen";
 
 const PageMode = ({ currentPage, totalPages, lines, surahs, onPageChange }) => {
+  const [isMidScreen, setIsMidScreen] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [isMidScrreen, setIsMidScreen] = useState(false);
-
-  useEffect(() => {
-    if (document.fonts) {
-      document.fonts.ready.then(() => setFontsLoaded(true));
-    } else {
-      setFontsLoaded(false);
-    }
-  }, []);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMidScreen(window.innerWidth <= 768);
     };
 
+    const loadFonts = async () => {
+      if (document.fonts) {
+        await document.fonts.ready;
+        setFontsLoaded(true);
+      } else {
+        setFontsLoaded(true);
+      }
+    };
+
     handleResize();
+    loadFonts();
+
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -34,7 +37,7 @@ const PageMode = ({ currentPage, totalPages, lines, surahs, onPageChange }) => {
     };
   }, []);
 
-  if (!lines || !surahs.length || !fontsLoaded) {
+  if (!fontsLoaded) {
     return <LoadingScreen />;
   }
 
@@ -49,13 +52,13 @@ const PageMode = ({ currentPage, totalPages, lines, surahs, onPageChange }) => {
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
         >
-          {isMidScrreen ? <ArrowLeft /> : <ArrowUp />}
+          {isMidScreen ? <ArrowLeft /> : <ArrowUp />}
         </button>
         <button
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
         >
-          {isMidScrreen ? <ArrowRight /> : <ArrowDown />}
+          {isMidScreen ? <ArrowRight /> : <ArrowDown />}
         </button>
       </PaginationContainer>
     </VerseAndPaginationWrapper>

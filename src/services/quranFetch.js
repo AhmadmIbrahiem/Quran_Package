@@ -1,24 +1,4 @@
-import apiInstance from "./axiosInterceptor"; // Import the custom Axios instance
-
-export const fetchQuran = async (chapter) => {
-  try {
-    const surahResponse = await apiInstance.get(`/chapters/${chapter}`);
-    const versesResponse = await apiInstance.get(`/quran/verses/uthmani`, {
-      params: { chapter_number: chapter },
-    });
-    console.log(surahResponse.data);
-    console.log(versesResponse.data);
-
-    const surahName = surahResponse.data.chapter.name_simple;
-    const bismillah = surahResponse.data.chapter.bismillah_pre || "";
-    const verses = versesResponse.data.verses;
-
-    return { surahName, bismillah, verses };
-  } catch (error) {
-    console.error("Error fetching Quran data:", error);
-    throw error;
-  }
-};
+import apiInstance from "./axiosInterceptor";
 
 export const fetchQuranPage = async (page) => {
   try {
@@ -30,13 +10,30 @@ export const fetchQuranPage = async (page) => {
     const meta = response.data.meta;
 
     const lines = {};
+
     verses.forEach((verse) => {
+      const [surahId, verseNumber] = verse.verse_key.split(":");
+
       verse.words.forEach((word) => {
         const lineNumber = word.line_number;
-        if (!lines[lineNumber]) lines[lineNumber] = [];
-        lines[lineNumber].push({
+
+        if (!lines[lineNumber]) {
+          lines[lineNumber] = {
+            surahNumBeforeLine: null,
+            surahTitle: null,
+            words: [],
+          };
+        }
+
+        if (verseNumber === "1") {
+          lines[lineNumber].surahNumBeforeLine = surahId;
+          lines[lineNumber].surahTitle = "ﱡﱟ";
+        }
+
+        lines[lineNumber].words.push({
           text: word.code_v1,
           verseKey: verse.verse_key,
+          id: word.id,
         });
       });
     });

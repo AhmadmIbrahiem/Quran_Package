@@ -110,24 +110,25 @@ export const PaginationContainer = styled.div`
 `;
 
 export const SurahTitle = styled.h2`
-  font-size: 2.5rem;
-  color: black;
-  font-family: "Amiri", serif;
+  font-family: "surah names", sans-serif; /* Explicitly apply the surah names font */
+  font-size: ${(props) => (props.isMobile ? "8vw" : "5rem")};
   text-align: center;
-  margin: 20px 0;
-  display: block;
+  margin: 1.5rem 0;
+  color: black;
+  line-height: 1.2;
+  font-weight: normal;
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 4rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 1.8rem;
+    font-size: 3rem;
   }
 `;
 
 export const Bismillah = styled.p`
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   color: black;
   text-align: center;
   margin: 20px 0;
@@ -155,4 +156,12 @@ export const Word = styled.span`
   @media (max-width: 300px) {
     font-size: 0.6rem;
   }
+`;
+
+export const Suraname = styled.div`
+  font-family: "surah names", sans-serif;
+  font-size: ${(props) => (props.isMobile ? "10vw" : "min(10vw, 8rem)")};
+  color: #000;
+  text-align: center;
+  margin: 1rem 0;
 `;

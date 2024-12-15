@@ -6,8 +6,6 @@ const apiInstance = axios.create({
 
 apiInstance.interceptors.request.use(
   (config) => {
-    console.log("Request Config:", config);
-
     return config;
   },
   (error) => {
@@ -18,8 +16,6 @@ apiInstance.interceptors.request.use(
 
 apiInstance.interceptors.response.use(
   (response) => {
-    console.log("Response:", response);
-
     return response;
   },
   (error) => {
